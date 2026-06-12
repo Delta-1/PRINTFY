@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link class="no-print" rel="apple-touch-icon" href="icons/icon-192.png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -202,12 +202,12 @@
             class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
           />
           <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
         <div id="main-suggestions-box" class="bg-slate-950 rounded-xl border border-slate-850 p-2 max-h-48 overflow-y-auto hidden">
-          </div>
+        </div>
 
         <div class="border-t border-slate-800/80 my-1"></div>
 
@@ -222,7 +222,7 @@
         </div>
 
         <div id="main-queue-container" class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1">
-          </div>
+        </div>
 
         <div id="main-queue-empty" class="hidden text-center py-8 text-slate-500 bg-slate-950/20 rounded-xl border border-dashed border-slate-850">
           <svg class="w-8 h-8 mx-auto opacity-30 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +259,7 @@
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-400">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </div>
             <div>
@@ -297,13 +297,13 @@
               </tr>
             </thead>
             <tbody id="inventory-table-body" class="divide-y divide-slate-800/40 text-xs">
-              </tbody>
+            </tbody>
           </table>
         </div>
 
         <div class="md:hidden text-center text-[10px] text-slate-500/80 pt-2 flex items-center justify-center gap-1">
           <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           <span>Deslize para a direita para ver o Painel</span>
         </div>
@@ -318,7 +318,8 @@
           <p class="text-[11px] text-slate-400">Verifique o alinhamento físico do rolo.</p>
         </div>
         <button onclick="triggerPrintNow()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-slate-950 text-xs font-extrabold rounded-xl transition-all shadow-lg flex items-center gap-1">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
           Imprimir Todas
         </button>
@@ -326,7 +327,7 @@
 
       <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-center overflow-auto min-h-[300px] max-h-[500px]">
         <div id="print-area-wrapper" class="origin-top scale-90 sm:scale-100 transition-transform">
-          </div>
+        </div>
       </div>
     </div>
 
@@ -515,9 +516,9 @@
   <script>
     // --- ESTADO GLOBAL ---
     let inventory = [];
-    let printQueue = {}; // Armazena { code: quantidade }
-    let currentActiveTab = 'main'; // Controlar aba ativa
-    let autoSyncEnabled = false; // Controle de sincronismo automático ao carregar
+    let printQueue = {}; 
+    let currentActiveTab = 'main'; 
+    let autoSyncEnabled = false; 
     
     let layout = {
       cols: 3,
@@ -537,7 +538,6 @@
 
     // --- CARREGAMENTO INICIAL ---
     window.onload = function() {
-      // Registrar Service Worker necessário para PWA e Modo Offline estrito
       if ('serviceWorker' in navigator) {
         const swCode = `
           const CACHE_NAME = 'printfy-cache-v2';
@@ -552,7 +552,6 @@
         navigator.serviceWorker.register(swUrl).catch(err => console.log('SW error:', err));
       }
 
-      // Capturar o evento de instalação do Google Chrome/Android
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         window.deferredPrompt = e;
@@ -571,7 +570,6 @@
         }
       });
 
-      // Restaurar estoque do LocalStorage
       const savedInventory = localStorage.getItem('printfy_v2_inventory');
       if (savedInventory) {
         try {
@@ -583,7 +581,6 @@
         loadDemoInventory();
       }
 
-      // Restaurar fila de impressão do LocalStorage
       const savedQueue = localStorage.getItem('printfy_v2_queue');
       if (savedQueue) {
         try {
@@ -591,7 +588,6 @@
         } catch(e) {}
       }
 
-      // Restaurar configurações de Layout
       const savedLayout = localStorage.getItem('printfy_v2_layout');
       if (savedLayout) {
         try {
@@ -600,7 +596,6 @@
         } catch(e) {}
       }
 
-      // Restaurar preferência de Autossincronização
       const savedAutoSync = localStorage.getItem('printfy_v2_auto_sync');
       if (savedAutoSync !== null) {
         autoSyncEnabled = (savedAutoSync === 'true');
@@ -609,7 +604,6 @@
       }
       document.getElementById('check-auto-sync').checked = autoSyncEnabled;
 
-      // Restaurar dados do Google Planilhas
       const savedUrl = localStorage.getItem('printfy_v2_sheet_url');
       if (savedUrl) {
         document.getElementById('sheet-url-input').value = savedUrl;
@@ -621,7 +615,6 @@
         }
       }
 
-      // Habilitar os Gestos de Deslizar (Swipe) para Celular
       setupTouchSwipeGestures();
 
       updateInventoryBadges();
@@ -631,7 +624,6 @@
       renderLabelsPreview();
     };
 
-    // --- CARREGAR PRODUTOS DE DEMONSTRAÇÃO ---
     function loadDemoInventory() {
       inventory = [
         { code: '011000340', name: 'Energético Mo Molhada', price: 48.00 },
@@ -643,19 +635,16 @@
       saveLocalInventory();
     }
 
-    // --- PERSISTÊNCIA LOCAL ---
     function saveLocalInventory() {
       localStorage.setItem('printfy_v2_inventory', JSON.stringify(inventory));
       updateInventoryBadges();
     }
 
-    // --- SALVAR FILA LOCAL ---
     function saveLocalQueue() {
       localStorage.setItem('printfy_v2_queue', JSON.stringify(printQueue));
       updateInventoryBadges();
     }
 
-    // --- SALVAR LAYOUT LOCAL ---
     function saveLocalLayout() {
       localStorage.setItem('printfy_v2_layout', JSON.stringify(layout));
     }
@@ -699,7 +688,6 @@
       document.getElementById('val-paddingLeftMm').textContent = layout.paddingLeftMm;
     }
 
-    // --- TOAST NOTIFICATIONS ---
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -725,7 +713,6 @@
       }, 3000);
     }
 
-    // --- TRANSICIONADOR DE ABAS COM PERSPECTIVA 3D ---
     function switchTab(tabId) {
       if (currentActiveTab === tabId) return;
 
@@ -742,7 +729,6 @@
 
       currentActiveTab = tabId;
 
-      // Update Desktop Nav Buttons
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('bg-slate-850', 'text-white');
         btn.classList.add('text-slate-400', 'hover:text-white');
@@ -753,7 +739,6 @@
         activeDesktopBtn.classList.add('bg-slate-850', 'text-white');
       }
 
-      // Update Mobile Nav Buttons
       document.querySelectorAll('.m-nav-btn').forEach(btn => {
         btn.classList.remove('text-emerald-400');
         btn.classList.add('text-slate-400');
@@ -765,7 +750,6 @@
       }
     }
 
-    // --- DETECÇÃO DE DESLIZAMENTO DE TELA (SWIPE) MOBILE EM QUALQUER LUGAR ---
     function setupTouchSwipeGestures() {
       let startX = 0;
       let startY = 0;
@@ -797,7 +781,6 @@
       }, { passive: true });
     }
 
-    // --- ABRIR / FECHAR O DRAWER DE CONFIGURAÇÕES ---
     function toggleSettingsDrawer() {
       const drawer = document.getElementById('settings-drawer');
       const backdrop = document.getElementById('settings-backdrop');
@@ -817,7 +800,6 @@
       }
     }
 
-    // --- ALTERAR CONFIGURAÇÃO DE SINC AUTOMÁTICO ---
     function toggleAutoSyncSetting(enabled) {
       autoSyncEnabled = enabled;
       localStorage.setItem('printfy_v2_auto_sync', enabled);
@@ -829,7 +811,6 @@
       }
     }
 
-    // --- PARSER DE IMPORTAÇÃO (TXT NaviVendas & CSV) ---
     function handleFileSelect(event) {
       const inputElement = event.target; 
       const file = inputElement.files[0];
@@ -848,7 +829,6 @@
       reader.readAsText(file);
     }
 
-    // Processar o TXT do NaviVendas de acordo com a lógica posicional milimetricamente exata (9/9/50)
     function parseNaVendasTXT(text) {
       const lines = text.split(/\r?\n/);
       let added = 0;
@@ -857,7 +837,6 @@
       lines.forEach(line => {
         if (line.trim().length < 20) return;
         try {
-          // Extração posicional corrigida do NaviVendas baseada estritamente na largura real
           const code = line.substring(0, 9).trim();
           const rawPrice = line.substring(9, 18).trim(); 
           const name = line.substring(18, 68).trim(); 
@@ -882,7 +861,6 @@
       saveAndNotify(added, updated, 'TXT NaviVendas');
     }
 
-    // Processar Planilha CSV
     function parseCSVText(text) {
       const lines = text.split(/\r?\n/);
       let added = 0;
@@ -922,7 +900,6 @@
       showToast(`Carregado: ${added} novos cadastrados e ${updated} atualizados.`);
     }
 
-    // --- ABA 1: SUGESTÕES / BUSCA RÁPIDA DE PRODUTOS ---
     function renderMainSearchSuggestions() {
       const query = document.getElementById('main-search-input').value.toLowerCase().trim();
       const sBox = document.getElementById('main-suggestions-box');
@@ -968,7 +945,6 @@
       });
     }
 
-    // --- GERENCIAMENTO DE FILA DE IMPRESSÃO (CARRINHO DE VENDAS) ---
     function addToQueue(code) {
       const qty = printQueue[code] || 0;
       printQueue[code] = qty + 1;
@@ -979,7 +955,6 @@
       showToast('Adicionado ao carrinho de impressão!');
     }
 
-    // --- INCREMENTAR FILA ---
     function incrementQueue(code) {
       const qty = printQueue[code] || 0;
       printQueue[code] = qty + 1;
@@ -988,7 +963,6 @@
       renderLabelsPreview();
     }
 
-    // --- DECREMENTAR FILA ---
     function decrementQueue(code) {
       const qty = printQueue[code] || 0;
       if (qty <= 1) {
@@ -1001,7 +975,6 @@
       renderLabelsPreview();
     }
 
-    // --- REMOVER DA FILA ---
     function removeFromQueue(code) {
       delete printQueue[code];
       saveLocalQueue();
@@ -1084,7 +1057,6 @@
       });
     }
 
-    // --- ABA 2: RENDERIZAR TABELA DO ESTOQUE GERAL ---
     function renderInventoryTable() {
       const query = document.getElementById('inventory-search-input').value.toLowerCase().trim();
       const tbody = document.getElementById('inventory-table-body');
@@ -1143,7 +1115,6 @@
       }
     }
 
-    // --- CONFIGURAÇÕES DE LAYOUT ---
     function updateLayoutParam(key, value) {
       if (key === 'showName' || key === 'showPrice' || key === 'showCode' || key === 'showBarcode') {
         layout[key] = value;
@@ -1158,7 +1129,6 @@
       renderLabelsPreview();
     }
 
-    // --- RENDERIZADOR DAS ETIQUETAS EM TEMPO REAL ---
     function renderLabelsPreview() {
       const container = document.getElementById('print-area-wrapper');
       container.innerHTML = '';
@@ -1264,7 +1234,6 @@
       container.appendChild(grid);
     }
 
-    // --- IMPRESSÃO ---
     function triggerPrintNow() {
       window.print();
     }
@@ -1299,7 +1268,6 @@
       }
     }
 
-    // --- FECHAR MODAL ---
     function closeProductModal() {
       document.getElementById('product-modal').classList.add('hidden');
     }
@@ -1352,7 +1320,6 @@
       closeProductModal();
     }
 
-    // --- SINC INTERNA COM GOOGLE SHEETS ---
     async function silentSyncWithSheets(url) {
       try {
         let sheetId = url;
@@ -1423,7 +1390,6 @@
       });
     }
 
-    // --- BACKUPS COM FORMATO DE ALINHAMENTO EXATO DO NAVIVENDAS (9/9/50) ---
     function exportToTXT() {
       let txtContent = "";
       inventory.forEach(p => {
@@ -1457,7 +1423,6 @@
       showToast('Download do backup concluído!');
     }
 
-    // --- LIMPAR DATABASE COMPLETO ---
     function clearEntireDatabase() {
       if (confirm('Atenção: Tem certeza que deseja apagar TODOS os produtos cadastrados do estoque?')) {
         inventory = [];
