@@ -1,0 +1,24 @@
+{
+  "name": "Printfy - Etiquetas Térmicas",
+  "short_name": "Printfy",
+  "description": "Gerador e adaptador de etiquetas térmicas para o NaviVendas.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}
