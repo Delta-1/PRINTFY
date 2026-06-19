@@ -39,34 +39,14 @@
     .tab-3d-right { transform: rotateY(35deg) translateX(105%) translateZ(-150px); opacity: 0; position: absolute; top: 0; pointer-events: none; }
     .pb-safe-bottom { padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
 
-    /* --- NOVO MOTOR DE IMPRESSÃO ISOLADO --- */
+    /* --- MOTOR DE IMPRESSÃO --- */
     @media print {
-      /* Oculta TODA a interface do aplicativo para não interferir na paginação */
       #app-ui, #settings-backdrop, #settings-drawer, #product-modal, #toast-container { 
         display: none !important; 
       }
-      
-      /* Limpa a página de fundo */
-      html, body {
-        background: white !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: auto !important;
-      }
-
-      /* Mostra APENAS a raiz de impressão gerada pelo JS */
-      #print-root {
-        display: block !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      .print-page { 
-        page-break-after: always !important; 
-        break-after: page !important; 
-        box-shadow: none !important;
-        margin-bottom: 0 !important;
-      }
+      html, body { background: white !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+      #print-root { display: block !important; margin: 0 !important; padding: 0 !important; }
+      .print-page { page-break-after: always !important; break-after: page !important; box-shadow: none !important; margin-bottom: 0 !important; border: none !important; }
       .print-border-none { border: none !important; }
     }
   </style>
@@ -125,10 +105,13 @@
     </nav>
 
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
       <div id="gesture-touch-zone" class="lg:col-span-7 viewport-3d">
 
         <section id="tab-main" class="tab-content-3d tab-3d-active bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-5">
-          <div><h2 class="text-lg font-extrabold text-white mb-0.5 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Pesquisar & Adicionar à Fila</h2></div>
+          <div>
+            <h2 class="text-lg font-extrabold text-white mb-0.5 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Pesquisar & Adicionar à Fila</h2>
+          </div>
           <div class="relative"><input type="text" id="main-search-input" oninput="renderMainSearchSuggestions()" placeholder="Digite o nome ou código..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors" /><svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
           <div id="main-suggestions-box" class="bg-slate-950 rounded-xl border border-slate-850 p-2 max-h-48 overflow-y-auto hidden"></div>
           <div class="border-t border-slate-800/80 my-1"></div>
@@ -138,15 +121,26 @@
         </section>
 
         <section id="tab-inventory" class="tab-content-3d tab-3d-right bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4">
-          <div class="flex justify-between items-center flex-wrap gap-2"><h2 class="text-lg font-extrabold text-white">Estoque Completo</h2><button onclick="openProductModal('add')" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg> Criar Manual</button></div>
+          <div class="flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <h2 class="text-lg font-extrabold text-white">Estoque Completo</h2>
+              <p class="text-[10px] text-slate-400">Inteligência: Códigos '011' = R$ / '010' = Kg.</p>
+            </div>
+            <button onclick="openProductModal('add')" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg> Criar Manual
+            </button>
+          </div>
           <div class="bg-slate-950/40 border border-slate-800/80 rounded-xl p-4 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg></div><div><span class="text-xs font-bold text-slate-200 block">Importar Arquivo NaviVendas</span><p class="text-[10px] text-slate-500">TXT ou CSV</p></div></div>
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg></div>
+              <div><span class="text-xs font-bold text-slate-200 block">Importar Arquivo</span><p class="text-[10px] text-slate-500">TXT NaviVendas ou CSV</p></div>
+            </div>
             <label class="px-3 py-1.5 bg-slate-800 hover:bg-slate-750 transition-colors rounded-lg border border-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">Carregar <input type="file" accept=".txt,.csv" onchange="handleFileSelect(event)" class="hidden" /></label>
           </div>
           <div class="relative"><input type="text" id="inventory-search-input" oninput="renderInventoryTable()" placeholder="Filtrar por nome ou código..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-9 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors" /><svg class="w-4 h-4 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
           <div class="overflow-x-auto rounded-xl border border-slate-800 max-h-[400px] overflow-y-auto">
             <table class="w-full text-left border-collapse">
-              <thead><tr class="bg-slate-950 text-slate-400 text-[10px] uppercase font-bold tracking-wider"><th class="p-3 border-b border-slate-800">Código</th><th class="p-3 border-b border-slate-800">Produto</th><th class="p-3 border-b border-slate-800 text-right">Preço</th><th class="p-3 border-b border-slate-800 text-center w-24">Ações</th></tr></thead>
+              <thead><tr class="bg-slate-950 text-slate-400 text-[10px] uppercase font-bold tracking-wider"><th class="p-3 border-b border-slate-800">Código</th><th class="p-3 border-b border-slate-800">Produto</th><th class="p-3 border-b border-slate-800 text-right">Valor</th><th class="p-3 border-b border-slate-800 text-center w-24">Ações</th></tr></thead>
               <tbody id="inventory-table-body" class="divide-y divide-slate-800/40 text-xs"></tbody>
             </table>
           </div>
@@ -154,24 +148,17 @@
 
         <section id="tab-printers" class="tab-content-3d tab-3d-right bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4">
           <div class="flex justify-between items-center">
-            <div>
-              <h2 class="text-lg font-extrabold text-white">Modelos de Impressora</h2>
-              <p class="text-xs text-slate-400">Configure rapidamente as dimensões do seu rolo térmico.</p>
-            </div>
-            <button onclick="saveCurrentAsNewPrinter()" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1">
-              + Salvar Atual
-            </button>
+            <div><h2 class="text-lg font-extrabold text-white">Modelos de Impressora</h2><p class="text-xs text-slate-400">Configure as dimensões do seu rolo.</p></div>
+            <button onclick="saveCurrentAsNewPrinter()" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1">+ Salvar Atual</button>
           </div>
-          
-          <div id="printers-list-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 max-h-[400px] overflow-y-auto pr-1">
-            </div>
+          <div id="printers-list-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 max-h-[400px] overflow-y-auto pr-1"></div>
         </section>
 
       </div>
 
       <div id="preview-section" class="lg:col-span-5 bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4 sticky top-6">
-        <div class="flex justify-between items-center">
-          <div><h2 class="text-base font-extrabold text-white">Visualização Exata</h2><p class="text-[11px] text-slate-400">Alinhamento físico do rolo.</p></div>
+        <div class="flex justify-between items-center no-print">
+          <div><h2 class="text-base font-extrabold text-white">Visualização Exata</h2><p class="text-[11px] text-slate-400">Alinhamento físico para a térmica.</p></div>
           <button onclick="triggerPrintNow()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-slate-950 text-xs font-extrabold rounded-xl transition-all shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Imprimir Folhas</button>
         </div>
         <div id="print-area-container" class="bg-slate-950 py-4 sm:p-4 rounded-xl border border-slate-850 flex flex-col items-center overflow-auto min-h-[300px] max-h-[500px]">
@@ -187,14 +174,24 @@
         <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
           <div class="flex items-center gap-2">
             <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
-            <span class="text-base font-bold text-white">Ajustes Finos (Milímetros)</span>
+            <span class="text-base font-bold text-white">Ajustes Finos</span>
           </div>
           <button onclick="toggleSettingsDrawer()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-850 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
         <div class="flex-grow overflow-y-auto p-5 flex flex-col gap-6">
+          
+          <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-700/80 flex flex-col gap-3 shadow-lg shadow-black/30">
+            <h3 class="text-xs font-extrabold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg> Gestão Rápida de Dados</h3>
+            <div class="grid grid-cols-2 gap-2 mt-1">
+              <button onclick="exportToTXT()" class="py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500 rounded-lg text-xs font-bold text-slate-200 transition-all shadow-sm">Backup (TXT)</button>
+              <button onclick="exportToCSV()" class="py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500 rounded-lg text-xs font-bold text-slate-200 transition-all shadow-sm">Backup (CSV)</button>
+            </div>
+            <button onclick="clearEntireDatabase()" class="w-full py-2.5 bg-red-950/40 hover:bg-red-900 text-red-300 text-xs font-bold rounded-lg border border-red-900/60 mt-1 transition-all">Apagar Todo o Estoque</button>
+          </div>
+
           <div class="bg-slate-950/50 p-4 rounded-xl border border-slate-800/80 flex flex-col gap-4">
-            <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Tamanho da Folha da Impressora</h3>
+            <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Tamanho da Folha (Rolo)</h3>
             <div class="grid grid-cols-2 gap-3">
               <div><label class="text-[10px] text-slate-400 block mb-1">Largura Página (mm)</label><input type="number" id="input-pageWidthMm" oninput="updateLayoutParam('pageWidthMm', this.value)" class="w-full bg-slate-900 border border-slate-800 rounded-lg py-1.5 px-3 text-xs text-slate-200" /></div>
               <div><label class="text-[10px] text-slate-400 block mb-1">Altura Página (mm)</label><input type="number" id="input-pageHeightMm" oninput="updateLayoutParam('pageHeightMm', this.value)" class="w-full bg-slate-900 border border-slate-800 rounded-lg py-1.5 px-3 text-xs text-slate-200" /></div>
@@ -239,7 +236,9 @@
         </div>
       </div>
     </div>
-  </div> <div id="print-root" class="hidden"></div>
+  </div>
+
+  <div id="print-root" class="hidden"></div>
 
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -251,12 +250,12 @@
       </div>
       <input type="hidden" id="m-prod-original-code" />
       <div class="flex flex-col gap-3 text-xs">
-        <div><label class="text-slate-400 block mb-1 font-semibold">Código (EAN)</label><input type="text" id="m-prod-code" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
-        <div><label class="text-slate-400 block mb-1 font-semibold">Nome</label><input type="text" id="m-prod-name" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
-        <div><label class="text-slate-400 block mb-1 font-semibold">Preço (R$)</label><input type="number" step="0.01" id="m-prod-price" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
+        <div><label class="text-slate-400 block mb-1 font-semibold">Código (EAN/NaviVendas)</label><input type="text" id="m-prod-code" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
+        <div><label class="text-slate-400 block mb-1 font-semibold">Nome do Produto</label><input type="text" id="m-prod-name" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
+        <div><label class="text-slate-400 block mb-1 font-semibold">Preço Unitário / Kg</label><input type="number" step="0.01" id="m-prod-price" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-white focus:border-emerald-500" /></div>
       </div>
       <div class="flex gap-2 justify-end mt-2">
-        <button onclick="closeProductModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs">Cancelar</button>
+        <button onclick="closeProductModal()" class="px-4 py-2 bg-slate-800 text-slate-300 font-semibold rounded-xl text-xs">Cancelar</button>
         <button onclick="saveManualProduct()" class="px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-xl text-xs">Gravar</button>
       </div>
     </div>
@@ -269,7 +268,7 @@
     let autoSyncEnabled = false; 
     let customPrinters = [];
     
-    // Layout Base (C3Tech Padrão)
+    // Layout Base (C3Tech Padrão) - Ajustado para máxima otimização do espaço na etiqueta
     let layout = {
       pageWidthMm: 100, pageHeightMm: 30, cols: 3, 
       widthMm: 30, heightMm: 20, 
@@ -286,11 +285,21 @@
         navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(e => {});
       }
 
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); window.deferredPrompt = e;
+        const btn = document.getElementById('pwa-install-btn');
+        if (btn) { btn.classList.remove('hidden'); btn.onclick = () => { window.deferredPrompt.prompt(); btn.classList.add('hidden'); }; }
+      });
+
       try { inventory = JSON.parse(localStorage.getItem('printfy_v2_inventory')) || []; } catch(e) {}
       if (!inventory.length) loadDemoInventory();
       try { printQueue = JSON.parse(localStorage.getItem('printfy_v2_queue')) || {}; } catch(e) {}
       try { layout = { ...layout, ...JSON.parse(localStorage.getItem('printfy_v2_layout')) }; } catch(e) {}
       try { customPrinters = JSON.parse(localStorage.getItem('printfy_v2_custom_printers')) || []; } catch(e) {}
+
+      autoSyncEnabled = localStorage.getItem('printfy_v2_auto_sync') === 'true';
+      const savedUrl = localStorage.getItem('printfy_v2_sheet_url');
+      if (savedUrl && autoSyncEnabled) silentSyncWithSheets(savedUrl);
 
       syncSettingsInputs();
       setupTouchSwipeGestures();
@@ -304,9 +313,9 @@
 
     function loadDemoInventory() {
       inventory = [
-        { code: '011000340', name: 'Energético Mo Molhada', price: 48.00 },
-        { code: '011000058', name: 'Somos 2 Gel de Massagem', price: 195.00 },
-        { code: '011000407', name: 'Calda Picante frutas vermelhas', price: 65.00 }
+        { code: '011000098', name: 'INTT SUCULENTA CALIANER', price: 75.00 },
+        { code: '010000058', name: 'Mousse em Gel Ousada', price: 195.00 },
+        { code: '011000407', name: 'Calda Picante frutas', price: 65.00 }
       ];
       saveLocalInventory();
     }
@@ -364,7 +373,7 @@
           <div class="absolute top-0 right-0 w-12 h-12 bg-emerald-500/10 blur-xl rounded-full group-hover:bg-emerald-500/20"></div>
           <h3 class="font-bold text-white text-sm mb-1 group-hover:text-emerald-400">C3Tech (Padrão)</h3>
           <p class="text-[10px] text-slate-400 mb-3">100mm x 30mm</p>
-          <div class="flex gap-2 text-[10px] font-semibold text-slate-500"><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">3 Col</span><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">20x30mm Etq.</span></div>
+          <div class="flex gap-2 text-[10px] font-semibold text-slate-500"><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">3 Col</span><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">30x20mm Etq.</span></div>
         </div>
         <div onclick="applyPrinterPreset('navivendas')" class="bg-slate-950 border border-slate-800 hover:border-emerald-500 rounded-xl p-4 cursor-pointer transition-all group relative overflow-hidden">
           <div class="absolute top-0 right-0 w-12 h-12 bg-emerald-500/10 blur-xl rounded-full group-hover:bg-emerald-500/20"></div>
@@ -394,17 +403,13 @@
       const name = prompt("Dê um nome para esta configuração de impressora:");
       if (!name) return;
       customPrinters.push({ name: name, layout: { ...layout } });
-      saveCustomPrinters();
-      renderPrintersTab();
-      showToast("Impressora salva com sucesso!");
+      saveCustomPrinters(); renderPrintersTab(); showToast("Impressora salva com sucesso!");
     }
 
     function deleteCustomPrinter(idx, event) {
       event.stopPropagation();
       if(confirm("Excluir esta configuração de impressora?")) {
-        customPrinters.splice(idx, 1);
-        saveCustomPrinters();
-        renderPrintersTab();
+        customPrinters.splice(idx, 1); saveCustomPrinters(); renderPrintersTab();
       }
     }
 
@@ -415,12 +420,9 @@
         layout = { ...layout, pageWidthMm: 114, pageHeightMm: 25, cols: 3, widthMm: 38, heightMm: 25, gapHorizontalMm: 2, gapVerticalMm: 0, paddingTopMm: 1, paddingBottomMm: 0, paddingLeftMm: 1, paddingRightMm: 0, fontSizeTitle: 10, fontSizePrice: 13 };
       } else if (modelId.startsWith('custom_')) {
         const idx = parseInt(modelId.split('_')[1]);
-        if (customPrinters[idx]) {
-          layout = { ...customPrinters[idx].layout };
-        }
+        if (customPrinters[idx]) layout = { ...customPrinters[idx].layout };
       }
-      syncSettingsInputs(); saveLocalLayout(); renderLabelsPreview(); switchTab('main');
-      showToast('Layout da impressora aplicado!');
+      syncSettingsInputs(); saveLocalLayout(); renderLabelsPreview(); switchTab('main'); showToast('Layout da impressora aplicado!');
     }
 
     function setupTouchSwipeGestures() {
@@ -446,6 +448,11 @@
       } else {
         drawer.classList.add('translate-x-full'); backdrop.classList.add('opacity-0'); setTimeout(() => backdrop.classList.add('hidden'), 300);
       }
+    }
+
+    function toggleAutoSyncSetting(enabled) {
+      autoSyncEnabled = enabled; localStorage.setItem('printfy_v2_auto_sync', enabled);
+      if (enabled && localStorage.getItem('printfy_v2_sheet_url')) silentSyncWithSheets(localStorage.getItem('printfy_v2_sheet_url'));
     }
 
     function handleFileSelect(event) {
@@ -487,6 +494,20 @@
       saveLocalInventory(); renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview(); showToast(`Carregado: ${added} novos, ${updated} atualizados.`);
     }
 
+    // --- FORMATAÇÃO INTELIGENTE DO PREÇO VISUAL (R$ vs KG) ---
+    function formatPrice(code, price) {
+      if (code.startsWith('010')) return `R$ ${price.toFixed(2)} /kg`;
+      return `R$ ${price.toFixed(2)}`;
+    }
+
+    // --- CALCULA DÍGITO VERIFICADOR EAN-13 (Balança) ---
+    function getEAN13Checksum(code12) {
+      let sum = 0;
+      for (let i = 0; i < 12; i++) sum += parseInt(code12[i]) * (i % 2 === 0 ? 1 : 3);
+      let check = 10 - (sum % 10);
+      return check === 10 ? 0 : check;
+    }
+
     function renderMainSearchSuggestions() {
       const query = document.getElementById('main-search-input').value.toLowerCase().trim();
       const sBox = document.getElementById('main-suggestions-box'); sBox.innerHTML = '';
@@ -496,7 +517,7 @@
       list.forEach(p => {
         const row = document.createElement('div'); row.className = 'flex justify-between items-center p-2 hover:bg-slate-900 rounded-lg transition-colors group cursor-pointer';
         row.onclick = () => { addToQueue(p.code); document.getElementById('main-search-input').value = ''; renderMainSearchSuggestions(); };
-        row.innerHTML = `<div class="flex-grow pr-3 min-w-0"><span class="text-xs font-semibold text-white group-hover:text-emerald-400 block line-clamp-1">${p.name}</span><span class="text-[10px] font-mono text-slate-500 block">${p.code} • R$ ${p.price.toFixed(2)}</span></div><button class="p-1.5 px-3 bg-slate-900 group-hover:bg-emerald-500 group-hover:text-slate-950 text-slate-400 text-[10px] font-extrabold rounded-lg shrink-0">+ Add</button>`;
+        row.innerHTML = `<div class="flex-grow pr-3 min-w-0"><span class="text-xs font-semibold text-white group-hover:text-emerald-400 block line-clamp-1">${p.name}</span><span class="text-[10px] font-mono text-slate-500 block">${p.code} • ${formatPrice(p.code, p.price)}</span></div><button class="p-1.5 px-3 bg-slate-900 group-hover:bg-emerald-500 group-hover:text-slate-950 text-slate-400 text-[10px] font-extrabold rounded-lg shrink-0">+ Add</button>`;
         sBox.appendChild(row);
       });
     }
@@ -504,7 +525,11 @@
     function addToQueue(code) { printQueue[code] = (printQueue[code] || 0) + 1; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); showToast('Adicionado à fila!'); }
     function incrementQueue(code) { printQueue[code] = (printQueue[code] || 0) + 1; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); }
     function decrementQueue(code) { if ((printQueue[code] || 0) <= 1) delete printQueue[code]; else printQueue[code] -= 1; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); }
-    function removeFromQueue(code) { delete printQueue[code]; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); }
+    function removeFromQueue(code) { delete printQueue[code]; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); showToast('Item removido do carrinho.', 'info'); }
+    function printSingleLabel(code) {
+      const originalQueue = { ...printQueue }; printQueue = { [code]: originalQueue[code] || 1 }; renderLabelsPreview();
+      setTimeout(() => { triggerPrintNow(); printQueue = originalQueue; renderLabelsPreview(); }, 50);
+    }
     function clearAllQueue() { printQueue = {}; saveLocalQueue(); renderQueueList(); renderLabelsPreview(); showToast('Fila limpa.', 'info'); }
 
     function renderQueueList() {
@@ -515,13 +540,15 @@
 
       keys.forEach(code => {
         const prod = inventory.find(p => p.code === code) || { code, name: 'Produto Removido', price: 0 };
+        const qty = printQueue[code];
         const item = document.createElement('div');
-        item.className = 'bg-slate-950 p-2.5 rounded-xl border border-slate-850 flex justify-between items-center gap-2 hover:border-slate-800';
+        item.className = 'bg-slate-950 p-2.5 rounded-xl border border-slate-850 flex flex-col sm:flex-row justify-between items-center gap-2 hover:border-slate-800';
         item.innerHTML = `
-          <div class="min-w-0 pr-2"><h4 class="font-bold text-white text-xs line-clamp-1 uppercase">${prod.name}</h4><div class="flex items-center gap-2 mt-1"><span class="font-mono text-[9px] text-slate-500">${prod.code}</span><span class="w-1 h-1 rounded-full bg-slate-800"></span><span class="text-xs font-bold text-emerald-400">R$ ${prod.price.toFixed(2)}</span></div></div>
+          <div class="min-w-0 pr-2"><h4 class="font-bold text-white text-xs line-clamp-1 uppercase">${prod.name}</h4><div class="flex items-center gap-2 mt-1"><span class="font-mono text-[9px] text-slate-500">${prod.code}</span><span class="w-1 h-1 rounded-full bg-slate-800"></span><span class="text-xs font-bold text-emerald-400">${formatPrice(prod.code, prod.price)}</span></div></div>
           <div class="flex items-center gap-2 shrink-0">
             <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg"><button onclick="decrementQueue('${prod.code}')" class="px-2 py-0.5 text-slate-400 hover:text-white font-bold text-xs">-</button><span class="px-2 font-bold text-xs text-white">${printQueue[code]}</span><button onclick="incrementQueue('${prod.code}')" class="px-2 py-0.5 text-slate-400 hover:text-white font-bold text-xs">+</button></div>
-            <button onclick="removeFromQueue('${prod.code}')" class="p-1 text-slate-500 hover:text-red-400 rounded hover:bg-red-500/10"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+            <button onclick="printSingleLabel('${prod.code}')" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 rounded-lg text-[9px] font-extrabold transition-all">Imprimir</button>
+            <button onclick="removeFromQueue('${prod.code}')" class="p-1 text-slate-500 hover:text-red-400 rounded hover:bg-red-500/10 transition-all"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
           </div>
         `;
         container.appendChild(item);
@@ -535,15 +562,15 @@
       if (filtered.length === 0) { tbody.innerHTML = `<tr><td colSpan="4" class="p-6 text-center text-slate-500">Nada encontrado.</td></tr>`; return; }
       filtered.forEach(p => {
         const tr = document.createElement('tr'); tr.className = 'hover:bg-slate-800/20';
-        tr.innerHTML = `<td class="p-3 font-mono text-[11px] text-slate-400">${p.code}</td><td class="p-3 font-semibold text-white">${p.name}</td><td class="p-3 text-right text-emerald-400 font-bold">R$ ${p.price.toFixed(2)}</td><td class="p-3 flex justify-center gap-1.5"><button onclick="openProductModal('edit', '${p.code}')" class="p-1.5 text-slate-400 hover:text-emerald-400 rounded-lg bg-slate-800/50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button><button onclick="deleteProductFromInventory('${p.code}')" class="p-1.5 text-slate-400 hover:text-red-400 rounded-lg bg-slate-800/50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td>`;
+        tr.innerHTML = `<td class="p-3 font-mono text-[11px] text-slate-400">${p.code}</td><td class="p-3 font-semibold text-white">${p.name}</td><td class="p-3 text-right text-emerald-400 font-bold">${formatPrice(p.code, p.price)}</td><td class="p-3 flex justify-center gap-1.5"><button onclick="openProductModal('edit', '${p.code}')" class="p-1.5 text-slate-400 hover:text-emerald-400 rounded-lg bg-slate-800/50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button><button onclick="deleteProductFromInventory('${p.code}')" class="p-1.5 text-slate-400 hover:text-red-400 rounded-lg bg-slate-800/50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td>`;
         tbody.appendChild(tr);
       });
     }
 
     function deleteProductFromInventory(code) {
-      if (confirm('Deseja excluir permanentemente este produto?')) {
+      if (confirm('Deseja excluir permanentemente este produto do estoque?')) {
         inventory = inventory.filter(p => p.code !== code); delete printQueue[code]; saveLocalInventory(); saveLocalQueue();
-        renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview(); showToast('Produto excluído.');
+        renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview(); showToast('Produto excluído.', 'info');
       }
     }
 
@@ -552,28 +579,23 @@
       saveLocalLayout(); renderLabelsPreview();
     }
 
-    // --- MOTOR DE IMPRESSÃO ISOLADO E PAGINAÇÃO PERFEITA ---
+    // --- LÓGICA EAN-13 E GERAÇÃO DA ETIQUETA ---
     function renderLabelsPreview() {
-      // Atualiza a visualização na tela
       const container = document.getElementById('print-area-wrapper'); container.innerHTML = '';
-      const labelList = []; inventory.forEach(p => { for (let i = 0; i < (printQueue[p.code] || 0); i++) labelList.push(p); });
+      const labelList = [];
+      inventory.forEach(p => { for (let i = 0; i < (printQueue[p.code] || 0); i++) labelList.push(p); });
 
       if (labelList.length === 0) {
-        container.innerHTML = `<div class="text-center py-10 text-slate-500"><p class="text-xs font-semibold">Sem Etiquetas Ativas</p></div>`;
+        container.innerHTML = `<div class="text-center py-10 text-slate-500"><svg class="w-10 h-10 mx-auto opacity-30 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><p class="text-xs font-semibold">Sem Etiquetas Ativas</p></div>`;
         return;
       }
 
-      // Dividir a lista total em grupos de linhas ("layout.cols" por linha = 1 folha física)
       const chunks = [];
-      for (let i = 0; i < labelList.length; i += layout.cols) {
-        chunks.push(labelList.slice(i, i + layout.cols));
-      }
+      for (let i = 0; i < labelList.length; i += layout.cols) chunks.push(labelList.slice(i, i + layout.cols));
 
       chunks.forEach(rowGroup => {
         const pageDiv = document.createElement('div');
-        // print-page assegura que na impressora haja um corte ou salto de página aqui!
-        pageDiv.className = 'print-page flex flex-wrap bg-white overflow-hidden relative box-border mb-4 print:mb-0 shadow-sm print:shadow-none';
-        
+        pageDiv.className = 'print-page flex flex-wrap bg-white overflow-hidden relative box-border mb-4 print:mb-0 shadow-sm print:shadow-none print-border-none';
         pageDiv.style.width = layout.pageWidthMm ? `${layout.pageWidthMm}mm` : '100mm';
         pageDiv.style.height = layout.pageHeightMm ? `${layout.pageHeightMm}mm` : '30mm';
         pageDiv.style.paddingTop = `${layout.paddingTopMm || 0}mm`;
@@ -582,50 +604,78 @@
         pageDiv.style.paddingRight = `${layout.paddingRightMm || 0}mm`;
         pageDiv.style.gap = `0 ${layout.gapHorizontalMm || 0}mm`;
 
-        rowGroup.forEach((p) => {
+        rowGroup.forEach((p, idx) => {
           const label = document.createElement('div');
-          // Tudo comprimido e alinhado ao centro conforme o seu pedido
-          label.className = 'flex flex-col justify-center items-center overflow-hidden text-black box-border print-border-none';
+          
+          // Alinhamento Colado ao Topo (justify-start) - Sem paddings desnecessários
+          label.className = 'flex flex-col justify-start items-center overflow-hidden text-black box-border print-border-none';
           label.style.width = `${layout.widthMm}mm`;
           label.style.height = `${layout.heightMm}mm`;
           
-          let nameEl = layout.showName ? `<div class="text-center font-bold uppercase leading-tight line-clamp-2 w-full" style="font-size: ${layout.fontSizeTitle}px;">${p.name}</div>` : '';
-          let barcodeId = `barcode-${Math.random().toString(36).substr(2, 9)}`;
-          let barcodeEl = layout.showBarcode ? `<div class="w-full flex justify-center mt-0.5"><svg id="${barcodeId}" class="w-full h-auto" style="max-height: ${layout.heightMm * 0.4}mm;"></svg></div>` : '';
-          let codeEl = layout.showCode ? `<div class="font-mono font-bold text-center leading-none" style="font-size: ${layout.fontSizeTitle * 0.85}px; margin-top: 1px;">${p.code}</div>` : '';
-          let priceEl = layout.showPrice ? `<div class="font-black text-center leading-none mt-0.5" style="font-size: ${layout.fontSizePrice}px;">R$ ${p.price.toFixed(2)}</div>` : '';
+          let finalBarcodeData = p.code;
+          let finalFormat = "CODE128";
+          let displayCodeText = p.code;
 
-          label.innerHTML = `${nameEl}${barcodeEl}${codeEl}${priceEl}`;
+          // Se for código da balança/sistema (011 ou 010)
+          if (p.code.startsWith('011') || p.code.startsWith('010')) {
+            const prefix = '2';
+            const itemCode = p.code.substring(3).padStart(6, '0'); // Ex: 000098
+            const priceStr = Math.round(p.price * 100).toString().padStart(5, '0'); // Ex: 07500 (R$ 75.00)
+            
+            let base12 = prefix + itemCode + priceStr;
+            let checkDigit = getEAN13Checksum(base12);
+            
+            finalBarcodeData = base12; // JsBarcode calcula o 13º automaticamente se format="EAN13"
+            finalFormat = "EAN13";
+            displayCodeText = base12 + checkDigit; // Exibe o código EAN-13 completo
+          }
+
+          let nameEl = layout.showName ? `<div class="text-center font-bold uppercase leading-none line-clamp-2 w-full mt-0 mb-0" style="font-size: ${layout.fontSizeTitle}px;">${p.name}</div>` : '';
+          let barcodeId = `barcode-${Math.random().toString(36).substr(2, 9)}`;
+          // Margens no SVG minimizadas
+          let barcodeEl = layout.showBarcode ? `<div class="w-full flex justify-center mt-0 mb-0"><svg id="${barcodeId}" class="w-full h-auto" style="max-height: ${layout.heightMm * 0.48}mm;"></svg></div>` : '';
+          let codeEl = layout.showCode ? `<div class="font-mono font-bold text-center leading-none mt-0" style="font-size: ${layout.fontSizeTitle * 0.85}px;">${displayCodeText}</div>` : '';
+          let priceEl = layout.showPrice ? `<div class="font-black text-center leading-none mt-0" style="font-size: ${layout.fontSizePrice}px;">${formatPrice(p.code, p.price)}</div>` : '';
+
+          label.innerHTML = `
+            <div class="flex flex-col items-center justify-start w-full h-full gap-0 pt-0">
+              ${nameEl}
+              ${barcodeEl}
+              ${codeEl}
+              ${priceEl}
+            </div>
+          `;
+          
           pageDiv.appendChild(label);
 
           if (layout.showBarcode) {
             setTimeout(() => {
-              try { JsBarcode(`#${barcodeId}`, p.code, { format: "CODE128", width: 1.5, height: 25, displayValue: false, margin: 0, background: "transparent" }); } catch (err) {}
+              try { 
+                JsBarcode(`#${barcodeId}`, finalBarcodeData, { format: finalFormat, width: 1.5, height: 26, displayValue: false, margin: 0, background: "transparent" }); 
+              } catch (err) {
+                // Fallback seguro caso o EAN13 falhe
+                try { JsBarcode(`#${barcodeId}`, finalBarcodeData, { format: "CODE128", width: 1.5, height: 26, displayValue: false, margin: 0, background: "transparent" }); } catch(e2) {}
+              }
             }, 0);
           }
         });
-
         container.appendChild(pageDiv);
       });
     }
 
-    // --- FUNÇÃO DE IMPRESSÃO (COPIA O PREVIEW PARA O ROOT ISOLADO) ---
     function triggerPrintNow() {
-      const printRoot = document.getElementById('print-root');
-      const wrapper = document.getElementById('print-area-wrapper');
-      
-      // Configurar a regra CSS da página no Root antes de enviar
       let printStyle = document.getElementById('dynamic-print-style');
       if (!printStyle) { printStyle = document.createElement('style'); printStyle.id = 'dynamic-print-style'; document.head.appendChild(printStyle); }
       printStyle.innerHTML = `@media print { @page { size: ${layout.pageWidthMm || 100}mm ${layout.pageHeightMm || 30}mm !important; margin: 0 !important; } }`;
 
-      // Copia a folha perfeitamente montada para o isolador
-      printRoot.innerHTML = wrapper.innerHTML;
+      const printRoot = document.getElementById('print-root') || document.createElement('div');
+      printRoot.id = 'print-root'; printRoot.className = 'hidden';
+      document.body.appendChild(printRoot);
+
+      printRoot.innerHTML = document.getElementById('print-area-wrapper').innerHTML;
       
-      // Delay minúsculo para garantir a renderização gráfica do SVG no Root antes da janela da impressora abrir
       setTimeout(() => {
         window.print();
-        // Limpa o root após imprimir para não poluir o DOM
         setTimeout(() => printRoot.innerHTML = '', 500);
       }, 100);
     }
@@ -633,11 +683,11 @@
     function openProductModal(mode, existingCode = '') {
       document.getElementById('product-modal').classList.remove('hidden');
       if (mode === 'edit') {
-        const p = inventory.find(i => i.code === existingCode); document.getElementById('modal-title').textContent = 'Editar';
+        const p = inventory.find(i => i.code === existingCode); document.getElementById('modal-title').textContent = 'Editar Produto';
         document.getElementById('m-prod-original-code').value = p.code; document.getElementById('m-prod-code').value = p.code;
         document.getElementById('m-prod-name').value = p.name; document.getElementById('m-prod-price').value = p.price;
       } else {
-        document.getElementById('modal-title').textContent = 'Adicionar';
+        document.getElementById('modal-title').textContent = 'Adicionar Produto';
         document.getElementById('m-prod-original-code').value = ''; document.getElementById('m-prod-code').value = '';
         document.getElementById('m-prod-name').value = ''; document.getElementById('m-prod-price').value = '';
       }
@@ -648,18 +698,63 @@
     function saveManualProduct() {
       const origCode = document.getElementById('m-prod-original-code').value; const code = document.getElementById('m-prod-code').value.trim();
       const name = document.getElementById('m-prod-name').value.trim(); const price = parseFloat(document.getElementById('m-prod-price').value) || 0;
-      if (!code || !name) return showToast('Preencha os dados obrigatórios.', 'error');
+      if (!code || !name) return showToast('Preencha os dados.', 'error');
 
       if (origCode) {
         const idx = inventory.findIndex(i => i.code === origCode);
-        if (origCode !== code && inventory.some(i => i.code === code)) return showToast('Código já existe!', 'error');
+        if (origCode !== code && inventory.some(i => i.code === code)) return showToast('Código em uso!', 'error');
         if (origCode !== code && printQueue[origCode]) { printQueue[code] = printQueue[origCode]; delete printQueue[origCode]; }
-        inventory[idx] = { code, name, price }; showToast('Atualizado!');
+        inventory[idx] = { code, name, price }; showToast('Produto atualizado!');
       } else {
-        if (inventory.some(p => p.code === code)) return showToast('Código existente!', 'error');
-        inventory.push({ code, name, price }); showToast('Adicionado!');
+        if (inventory.some(p => p.code === code)) return showToast('Código já existe!', 'error');
+        inventory.push({ code, name, price }); showToast('Produto cadastrado!');
       }
+
       saveLocalInventory(); saveLocalQueue(); renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview(); closeProductModal();
+    }
+
+    async function silentSyncWithSheets(url) {
+      try {
+        let sheetId = url.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1] || url;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`); if (!res.ok) return;
+        (await res.text()).split(/\r?\n/).forEach((line, index) => {
+          if (index === 0) return; const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); if (cols.length < 2) return;
+          const code = cols[0].replace(/"/g, '').trim(); const name = cols[1].replace(/"/g, '').trim(); const price = parseFloat((cols[2] || '0').replace(/"/g, '').replace(',', '.').trim()) || 0;
+          if (!code || !name) return;
+          const idx = inventory.findIndex(p => p.code === code);
+          idx >= 0 ? inventory[idx] = { code, name, price } : inventory.push({ code, name, price });
+        });
+        saveLocalInventory(); renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview();
+        document.getElementById('sync-status').textContent = 'Sincronizado'; document.getElementById('sync-status').className = 'font-bold text-emerald-400';
+      } catch(e) {}
+    }
+
+    function saveAndSyncUrl() {
+      const url = document.getElementById('sheet-url-input').value.trim(); if (!url) return showToast('URL inválida.', 'error');
+      localStorage.setItem('printfy_v2_sheet_url', url); document.getElementById('sync-status').textContent = 'Conectando...'; silentSyncWithSheets(url).then(() => showToast('Sincronizado!'));
+    }
+
+    function exportToTXT() {
+      let txtContent = "";
+      inventory.forEach(p => {
+        const rawCode = p.code.padEnd(9, ' ');
+        const rawPrice = Math.round(p.price * 100000).toString().padStart(9, '0'); 
+        const rawName = p.name.padEnd(50, ' ');
+        txtContent += `${rawCode}${rawPrice}${rawName}0000000000000000010000                        000000000000000000000000            \n`;
+      });
+      triggerDownload(txtContent, 'printfy_navivendas_backup.txt', 'text/plain');
+    }
+    
+    function exportToCSV() {
+      let csvContent = "Codigo,Nome,Preco\n"; inventory.forEach(p => csvContent += `"${p.code}","${p.name.replace(/"/g, '""')}",${p.price}\n`); triggerDownload(csvContent, 'printfy_estoque_backup.csv', 'text/csv');
+    }
+
+    function triggerDownload(content, filename, contentType) {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([content], { type: contentType })); a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); showToast('Backup concluído!');
+    }
+
+    function clearEntireDatabase() {
+      if (confirm('Atenção: Apagar TODOS os produtos permanentemente?')) { inventory = []; printQueue = {}; saveLocalInventory(); saveLocalQueue(); renderMainSearchSuggestions(); renderQueueList(); renderInventoryTable(); renderLabelsPreview(); showToast('Estoque apagado.', 'info'); }
     }
   </script>
 </body>
