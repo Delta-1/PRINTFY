@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link class="no-print" rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -39,19 +39,35 @@
     .tab-3d-right { transform: rotateY(35deg) translateX(105%) translateZ(-150px); opacity: 0; position: absolute; top: 0; pointer-events: none; }
     .pb-safe-bottom { padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
 
-    /* --- MOTOR DE IMPRESSÃO --- */
+    /* --- MOTOR DE IMPRESSÃO ISOLADO E PERFEITO --- */
+    @media screen {
+      #print-root { display: none !important; }
+    }
+
     @media print {
-      #app-ui, #settings-backdrop, #settings-drawer, #product-modal, #toast-container { 
-        display: none !important; 
-      }
-      html, body { background: white !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+      /* Esconde completamente a interface do utilizador */
+      #app-ui { display: none !important; }
+      
+      /* Mostra APENAS as etiquetas */
       #print-root { display: block !important; margin: 0 !important; padding: 0 !important; }
-      .print-page { page-break-after: always !important; break-after: page !important; box-shadow: none !important; margin-bottom: 0 !important; border: none !important; }
-      .print-border-none { border: none !important; }
+      
+      html, body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .print-page {
+        page-break-after: always !important;
+        break-after: page !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        border: none !important;
+      }
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans">
+<body class="bg-slate-950 text-slate-100 font-sans h-full">
 
   <div id="app-ui" class="h-full flex flex-col pb-24 md:pb-6 overflow-x-hidden">
     <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-4 md:px-6 py-4">
@@ -113,7 +129,7 @@
             <h2 class="text-lg font-extrabold text-white mb-0.5 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Pesquisar & Adicionar à Fila</h2>
           </div>
           <div class="relative"><input type="text" id="main-search-input" oninput="renderMainSearchSuggestions()" placeholder="Digite o nome ou código..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors" /><svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
-          <div id="main-suggestions-box" class="bg-slate-950 rounded-xl border border-slate-850 p-2 max-h-48 overflow-y-auto hidden"></div>
+          <div id="main-suggestions-box" class="bg-slate-950 rounded-xl border border-slate-850 p-2 max-h-[400px] overflow-y-auto hidden"></div>
           <div class="border-t border-slate-800/80 my-1"></div>
           <div class="flex justify-between items-center"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span><h3 class="text-sm font-bold text-white">Carrinho de Impressão</h3></div><button onclick="clearAllQueue()" class="text-[11px] text-red-400 hover:text-red-300 font-bold">Limpar Lista</button></div>
           <div id="main-queue-container" class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1"></div>
@@ -124,7 +140,7 @@
           <div class="flex justify-between items-center flex-wrap gap-2">
             <div>
               <h2 class="text-lg font-extrabold text-white">Estoque Completo</h2>
-              <p class="text-[10px] text-slate-400">Inteligência: Códigos '011' = R$ / '010' = Kg.</p>
+              <p class="text-[10px] text-slate-400">Inteligência: 011 = Código + Preço | 010 = Código + Kg.</p>
             </div>
             <button onclick="openProductModal('add')" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg> Criar Manual
@@ -147,9 +163,23 @@
         </section>
 
         <section id="tab-printers" class="tab-content-3d tab-3d-right bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4">
-          <div class="flex justify-between items-center">
-            <div><h2 class="text-lg font-extrabold text-white">Modelos de Impressora</h2><p class="text-xs text-slate-400">Configure as dimensões do seu rolo.</p></div>
-            <button onclick="saveCurrentAsNewPrinter()" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-emerald-400 text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1">+ Salvar Atual</button>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h2 class="text-lg font-extrabold text-white">Modelos de Impressora</h2>
+              <p class="text-xs text-slate-400">Gira os seus perfis TXT de Impressoras.</p>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <label class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl cursor-pointer transition-colors flex items-center gap-1 w-full sm:w-auto justify-center" title="Importar Modelos em TXT">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg> Importar
+                <input type="file" accept=".txt" onchange="importPrintersFromTXT(event)" class="hidden" />
+              </label>
+              <button onclick="exportPrintersToTXT()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-colors flex items-center gap-1 w-full sm:w-auto justify-center" title="Baixar modelos atuais em TXT">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> Exportar
+              </button>
+              <button onclick="saveCurrentAsNewPrinter()" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-bold rounded-xl transition-all shadow-md w-full sm:w-auto">
+                + Salvar Atual
+              </button>
+            </div>
           </div>
           <div id="printers-list-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 max-h-[400px] overflow-y-auto pr-1"></div>
         </section>
@@ -157,7 +187,7 @@
       </div>
 
       <div id="preview-section" class="lg:col-span-5 bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4 sticky top-6">
-        <div class="flex justify-between items-center no-print">
+        <div class="flex justify-between items-center">
           <div><h2 class="text-base font-extrabold text-white">Visualização Exata</h2><p class="text-[11px] text-slate-400">Alinhamento físico para a térmica.</p></div>
           <button onclick="triggerPrintNow()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-slate-950 text-xs font-extrabold rounded-xl transition-all shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Imprimir Folhas</button>
         </div>
@@ -236,13 +266,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> <div id="print-root"></div>
 
-  <div id="print-root" class="hidden"></div>
+  <div id="toast-container" class="no-print fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
-  <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+  <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-slate-900 rounded-2xl border border-slate-800 max-w-sm w-full p-5 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in duration-150">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
         <h3 id="modal-title" class="text-sm font-extrabold text-white">Adicionar Produto</h3>
@@ -268,7 +296,7 @@
     let autoSyncEnabled = false; 
     let customPrinters = [];
     
-    // Layout Base (C3Tech Padrão) - Ajustado para máxima otimização do espaço na etiqueta
+    // Layout Base (C3Tech Padrão - Alinhamento Aperfeiçoado)
     let layout = {
       pageWidthMm: 100, pageHeightMm: 30, cols: 3, 
       widthMm: 30, heightMm: 20, 
@@ -382,7 +410,6 @@
           <div class="flex gap-2 text-[10px] font-semibold text-slate-500"><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">3 Col</span><span class="bg-slate-900 px-2 py-1 rounded border border-slate-800">38x25mm Etq.</span></div>
         </div>
       `;
-
       customPrinters.forEach((p, idx) => {
         const div = document.createElement('div');
         div.className = "bg-slate-950 border border-slate-800 hover:border-blue-500 rounded-xl p-4 cursor-pointer transition-all group relative overflow-hidden flex flex-col justify-between";
@@ -423,6 +450,31 @@
         if (customPrinters[idx]) layout = { ...customPrinters[idx].layout };
       }
       syncSettingsInputs(); saveLocalLayout(); renderLabelsPreview(); switchTab('main'); showToast('Layout da impressora aplicado!');
+    }
+
+    // Export e Import das Impressoras TXT
+    function exportPrintersToTXT() {
+      const content = JSON.stringify(customPrinters, null, 2);
+      triggerDownload(content, 'printfy_modelos_impressora.txt', 'text/plain');
+    }
+
+    function importPrintersFromTXT(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            customPrinters = [...customPrinters, ...imported];
+            saveCustomPrinters();
+            renderPrintersTab();
+            showToast('Modelos importados com sucesso!');
+          } else { showToast('Formato de arquivo inválido.', 'error'); }
+        } catch(err) { showToast('Erro ao ler o arquivo.', 'error'); }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
     }
 
     function setupTouchSwipeGestures() {
@@ -500,19 +552,26 @@
       return `R$ ${price.toFixed(2)}`;
     }
 
-    // --- CALCULA DÍGITO VERIFICADOR EAN-13 (Balança) ---
+    // --- CALCULA DÍGITO VERIFICADOR EAN-13 PERFEITO PARA LEITORES A LASER ---
     function getEAN13Checksum(code12) {
       let sum = 0;
-      for (let i = 0; i < 12; i++) sum += parseInt(code12[i]) * (i % 2 === 0 ? 1 : 3);
+      for (let i = 0; i < 12; i++) {
+        // Multiplica as posições ímpares (índice 0, 2, 4...) por 1 e pares (índice 1, 3, 5...) por 3
+        sum += parseInt(code12[i]) * (i % 2 === 0 ? 1 : 3);
+      }
       let check = 10 - (sum % 10);
       return check === 10 ? 0 : check;
     }
 
+    // --- BUSCA COM SCROLL INFINITO (MOSTRA TODO O ESTOQUE QUANDO VAZIO) ---
     function renderMainSearchSuggestions() {
       const query = document.getElementById('main-search-input').value.toLowerCase().trim();
       const sBox = document.getElementById('main-suggestions-box'); sBox.innerHTML = '';
-      let list = (!query) ? inventory.slice(-5).reverse() : inventory.filter(p => p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query)).slice(0, 8);
-      if (list.length === 0) { sBox.innerHTML = `<div class="p-3 text-center text-xs text-slate-500">Nenhum produto encontrado.</div>`; sBox.classList.remove('hidden'); return; }
+      
+      // Sem limites! Retorna todo o stock se vazio, ou filtra e retorna tudo o que corresponder
+      let list = (!query) ? [...inventory].reverse() : inventory.filter(p => p.name.toLowerCase().includes(query) || p.code.toLowerCase().includes(query));
+      
+      if (list.length === 0) { sBox.innerHTML = `<div class="p-3 text-center text-xs text-slate-500">Nenhum produto encontrado no estoque.</div>`; sBox.classList.remove('hidden'); return; }
       sBox.classList.remove('hidden');
       list.forEach(p => {
         const row = document.createElement('div'); row.className = 'flex justify-between items-center p-2 hover:bg-slate-900 rounded-lg transition-colors group cursor-pointer';
@@ -579,7 +638,7 @@
       saveLocalLayout(); renderLabelsPreview();
     }
 
-    // --- LÓGICA EAN-13 E GERAÇÃO DA ETIQUETA ---
+    // --- NOVA LÓGICA EAN-13 (Balança) & ALINHAMENTO ---
     function renderLabelsPreview() {
       const container = document.getElementById('print-area-wrapper'); container.innerHTML = '';
       const labelList = [];
@@ -594,45 +653,45 @@
       for (let i = 0; i < labelList.length; i += layout.cols) chunks.push(labelList.slice(i, i + layout.cols));
 
       chunks.forEach(rowGroup => {
-        const pageDiv = document.createElement('div');
-        pageDiv.className = 'print-page flex flex-wrap bg-white overflow-hidden relative box-border mb-4 print:mb-0 shadow-sm print:shadow-none print-border-none';
-        pageDiv.style.width = layout.pageWidthMm ? `${layout.pageWidthMm}mm` : '100mm';
-        pageDiv.style.height = layout.pageHeightMm ? `${layout.pageHeightMm}mm` : '30mm';
-        pageDiv.style.paddingTop = `${layout.paddingTopMm || 0}mm`;
-        pageDiv.style.paddingBottom = `${layout.paddingBottomMm || 0}mm`;
-        pageDiv.style.paddingLeft = `${layout.paddingLeftMm || 0}mm`;
-        pageDiv.style.paddingRight = `${layout.paddingRightMm || 0}mm`;
-        pageDiv.style.gap = `0 ${layout.gapHorizontalMm || 0}mm`;
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'print-page flex flex-wrap bg-white overflow-hidden relative box-border mb-4 print:mb-0 shadow-sm print:shadow-none print-border-none';
+        rowDiv.style.width = layout.pageWidthMm ? `${layout.pageWidthMm}mm` : '100mm';
+        rowDiv.style.height = layout.pageHeightMm ? `${layout.pageHeightMm}mm` : '30mm';
+        rowDiv.style.paddingTop = `${layout.paddingTopMm || 0}mm`;
+        rowDiv.style.paddingBottom = `${layout.paddingBottomMm || 0}mm`;
+        rowDiv.style.paddingLeft = `${layout.paddingLeftMm || 0}mm`;
+        rowDiv.style.paddingRight = `${layout.paddingRightMm || 0}mm`;
+        rowDiv.style.gap = `0 ${layout.gapHorizontalMm || 0}mm`;
 
         rowGroup.forEach((p, idx) => {
           const label = document.createElement('div');
           
-          // Alinhamento Colado ao Topo (justify-start) - Sem paddings desnecessários
+          // Alinhamento justify-start para garantir que o conteúdo fique colado ao topo
           label.className = 'flex flex-col justify-start items-center overflow-hidden text-black box-border print-border-none';
           label.style.width = `${layout.widthMm}mm`;
           label.style.height = `${layout.heightMm}mm`;
+          label.style.padding = '0.5mm';
           
+          // Lógica da Balança EAN-13 Inteligente
           let finalBarcodeData = p.code;
           let finalFormat = "CODE128";
           let displayCodeText = p.code;
 
-          // Se for código da balança/sistema (011 ou 010)
           if (p.code.startsWith('011') || p.code.startsWith('010')) {
             const prefix = '2';
-            const itemCode = p.code.substring(3).padStart(6, '0'); // Ex: 000098
-            const priceStr = Math.round(p.price * 100).toString().padStart(5, '0'); // Ex: 07500 (R$ 75.00)
-            
+            const itemCode = p.code.substring(3).padStart(6, '0');
+            const priceStr = Math.round(p.price * 100).toString().padStart(5, '0');
             let base12 = prefix + itemCode + priceStr;
             let checkDigit = getEAN13Checksum(base12);
             
-            finalBarcodeData = base12; // JsBarcode calcula o 13º automaticamente se format="EAN13"
+            finalBarcodeData = base12; 
             finalFormat = "EAN13";
-            displayCodeText = base12 + checkDigit; // Exibe o código EAN-13 completo
+            displayCodeText = base12 + checkDigit; // Exibe o EAN-13 visível completo
           }
 
-          let nameEl = layout.showName ? `<div class="text-center font-bold uppercase leading-none line-clamp-2 w-full mt-0 mb-0" style="font-size: ${layout.fontSizeTitle}px;">${p.name}</div>` : '';
+          let nameEl = layout.showName ? `<div class="text-center font-bold uppercase leading-none line-clamp-2 w-full mt-0 mb-0.5" style="font-size: ${layout.fontSizeTitle}px;">${p.name}</div>` : '';
           let barcodeId = `barcode-${Math.random().toString(36).substr(2, 9)}`;
-          // Margens no SVG minimizadas
+          // Margens minimizadas
           let barcodeEl = layout.showBarcode ? `<div class="w-full flex justify-center mt-0 mb-0"><svg id="${barcodeId}" class="w-full h-auto" style="max-height: ${layout.heightMm * 0.48}mm;"></svg></div>` : '';
           let codeEl = layout.showCode ? `<div class="font-mono font-bold text-center leading-none mt-0" style="font-size: ${layout.fontSizeTitle * 0.85}px;">${displayCodeText}</div>` : '';
           let priceEl = layout.showPrice ? `<div class="font-black text-center leading-none mt-0" style="font-size: ${layout.fontSizePrice}px;">${formatPrice(p.code, p.price)}</div>` : '';
@@ -646,7 +705,7 @@
             </div>
           `;
           
-          pageDiv.appendChild(label);
+          rowDiv.appendChild(label);
 
           if (layout.showBarcode) {
             setTimeout(() => {
@@ -659,25 +718,32 @@
             }, 0);
           }
         });
-        container.appendChild(pageDiv);
+        container.appendChild(rowDiv);
       });
     }
 
     function triggerPrintNow() {
+      // Cria ou atualiza a regra de impressão dinâmica do tamanho da página
       let printStyle = document.getElementById('dynamic-print-style');
-      if (!printStyle) { printStyle = document.createElement('style'); printStyle.id = 'dynamic-print-style'; document.head.appendChild(printStyle); }
+      if (!printStyle) { 
+        printStyle = document.createElement('style'); 
+        printStyle.id = 'dynamic-print-style'; 
+        document.head.appendChild(printStyle); 
+      }
       printStyle.innerHTML = `@media print { @page { size: ${layout.pageWidthMm || 100}mm ${layout.pageHeightMm || 30}mm !important; margin: 0 !important; } }`;
 
-      const printRoot = document.getElementById('print-root') || document.createElement('div');
-      printRoot.id = 'print-root'; printRoot.className = 'hidden';
-      document.body.appendChild(printRoot);
-
-      printRoot.innerHTML = document.getElementById('print-area-wrapper').innerHTML;
+      const wrapper = document.getElementById('print-area-wrapper');
+      const container = document.getElementById('print-area-container');
+      const printRoot = document.getElementById('print-root');
+      
+      // Move o DOM real para a raiz invisível da página (Isto evita a quebra dos SVG e o erro da tela branca!)
+      printRoot.appendChild(wrapper);
       
       setTimeout(() => {
         window.print();
-        setTimeout(() => printRoot.innerHTML = '', 500);
-      }, 100);
+        // Devolve o DOM para a interface normal após a janela da impressora abrir
+        container.appendChild(wrapper);
+      }, 150);
     }
 
     function openProductModal(mode, existingCode = '') {
